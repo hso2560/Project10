@@ -263,6 +263,7 @@ GameObject:
   - component: {fileID: 8063736351846227304}
   - component: {fileID: 8063736351846227305}
   - component: {fileID: 8063736351846227307}
+  - component: {fileID: 550183153024988071}
   - component: {fileID: 8063736351846227310}
   m_Layer: 6
   m_Name: Player
@@ -347,12 +348,33 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!50 &550183153024988071
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8063736351846227311}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &8063736351846227310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,6 +394,7 @@ MonoBehaviour:
   hp: 0
   isMine: 0
   dead: 0
+  isAtk: 0
   speed: 5.5
   nickTxt: {fileID: 1820769985077247189}
   hpFill: {fileID: 2155900393718849261}

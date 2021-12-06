@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     public bool isMine;
     public bool dead;
 
+    public bool isAtk;
+
     public float speed = 5.5f;
 
     public Text nickTxt;
@@ -76,6 +78,35 @@ public class Player : MonoBehaviour
         if(!isMine)
         {
             transform.position = Vector3.Lerp(transform.position, target, speed * Time.deltaTime);
+        }
+    }
+
+    public void Damaged(int damage, int attacker)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            hp = 0;
+        }
+        hpFill.fillAmount = (float)this.hp / maxHp;
+
+        if (hp == 0 && isMine)
+        {
+            Client.instance.Dead(attacker);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!isMine) return;
+
+        if (collision.CompareTag("Bullet"))
+        {
+            Bullet b = collision.GetComponent<Bullet>();
+            if(b.playerID != id)
+            {
+                Client.instance.Damaged(b.serverID, b.playerID, id, b.damage);
+            }
         }
     }
 

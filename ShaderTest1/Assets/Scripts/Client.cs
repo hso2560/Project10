@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class CommandHead
 {
@@ -22,6 +23,10 @@ public class CommandHead
     public static readonly string UPDATE_ROOM = "UPDATE ROOM";
     public static readonly string SYSTEM_MSG = "SYSTEM MSG";
     public static readonly string CHAT = "CHAT";
+    public static readonly string ATTACK = "ATTACK";
+    public static readonly string DAMAGED = "DAMAGED";
+    public static readonly string DEAD = "DEAD";
+    public static readonly string RESPAWN = "RESPAWN";
 }
 
 public class Client : MonoBehaviour
@@ -55,14 +60,51 @@ public class Client : MonoBehaviour
 
     public int id;
     public bool connected;
-    public GameObject playerPref;
+    public GameObject playerPref, bulletPref;
     public Dictionary<int, Player> playerDict = new Dictionary<int, Player>();
+    public Player myPlayer;
+    public Dictionary<long, Bullet> bulletDict = new Dictionary<long, Bullet>();
+
+    private Camera mainCam;
+    private CameraMove camMove;
+    private Queue<GameObject> bulletQueue = new Queue<GameObject>();
 
     private void Awake()
     {
         Screen.SetResolution(1280, 720, false);
         Application.runInBackground = true;
         instance = this;
+    }
+
+    private void Start()
+    {
+        mainCam = Camera.main;
+        camMove = mainCam.GetComponent<CameraMove>();
+        for(int i=0; i<15; i++)
+        {
+            GameObject o = Instantiate(bulletPref,transform);
+            InsertBullet(o);
+        }
+    }
+
+    public void InsertBullet(GameObject o)
+    {
+        o.SetActive(false);
+        bulletQueue.Enqueue(o);
+    }
+    public GameObject GetBullet()
+    {
+        GameObject o = null;
+        if (bulletQueue.Count != 0)
+        {
+            o = bulletQueue.Dequeue();
+        }
+        else
+        {
+            o = Instantiate(bulletPref,transform);
+        }
+        o.SetActive(true);
+        return o;
     }
 
     public void StartGame()
@@ -146,6 +188,8 @@ public class Client : MonoBehaviour
                             Player p = Instantiate(playerPref, Vector2.zero, Quaternion.identity).GetComponent<Player>();
                             p.SetData(id, 300, Vector2.zero, false, true,nickInput.text);
                             playerDict.Add(id, p);
+                            myPlayer = p;
+                            camMove.SetInit(myPlayer.transform);
                             nickInput.transform.parent.gameObject.SetActive(false);
                             systemTxt.transform.parent.gameObject.SetActive(true);
                             break;
@@ -193,7 +237,31 @@ public class Client : MonoBehaviour
                             break;
 
                         case "CHAT":  //채팅
-                            chatText.text += chatText.text != "" ? $"\n<color=blue>{playerDict[int.Parse(data[1])].nickname} :</color> {data[2]}" : $"<color=blue>{playerDict[int.Parse(data[1])].nickname} :</color> {data[2]}";
+                            int idx = receivedMsg.IndexOf('#', 5);
+                            string msg = receivedMsg.Substring(idx + 1);
+                            chatText.text += chatText.text != "" ? $"\n<color=blue>{playerDict[int.Parse(data[1])].nickname} :</color> {msg}" : $"<color=blue>{playerDict[int.Parse(data[1])].nickname} :</color> {msg}";
+                            break;
+
+                        case "ATTACK":
+                            ID = int.Parse(data[1]);
+                            long bID = long.Parse(data[3]);
+                            Bullet b = GetBullet().GetComponent<Bullet>();
+                            b.SetInit(playerDict[ID].transform.position, float.Parse(data[2]),ID, bID);
+                            bulletDict.Add(bID, b);
+                            break;
+
+                        case "DAMAGED":
+                            ID = int.Parse(data[1]);
+                            bulletDict[long.Parse(data[4])].Inactive();
+                            playerDict[ID].Damaged(int.Parse(data[2]),int.Parse(data[3]));
+                            break;
+
+                        case "DEAD":
+                            Death(int.Parse(data[2]), int.Parse(data[1]));
+                            break;
+
+                        case "RESPAWN":
+                            Respawn(int.Parse(data[1]));
                             break;
 
                         default:  //정의하지 않은 헤드가 있음
@@ -246,7 +314,77 @@ public class Client : MonoBehaviour
             ServerSend($"{id}#0#{roomNameInput.text}#6", CommandHead.ENTER_ROOM);
         }
     }
-    
+
+    public void Death(int killerID, int deadID)
+    {
+        systemTxt.text = $"'{playerDict[killerID].nickname}'님이 '{playerDict[deadID].nickname}'님을 죽였습니다.";
+        playerDict[deadID].dead = true;
+        playerDict[deadID].transform.localScale = new Vector3(0.2f, 0.2f);
+        if(deadID == id)
+        {
+            StartCoroutine(DelayFunc(10f, () =>
+            {
+                if (inRoom)
+                {
+                    ServerSend(id.ToString(), CommandHead.RESPAWN);
+                }
+            }));
+        }
+    }
+
+    public void Respawn(int _id)
+    {
+        Player p = playerDict[_id];
+        p.hp = p.maxHp;
+        p.Damaged(0, 0); //그냥 HP UI만 갱신시킴
+        p.transform.localScale = Vector3.one;
+        p.dead = false;
+
+        systemTxt.text = p.nickname + "이 부활했음";
+    }
+
+    private void Update()
+    {
+        if(connected && inRoom)
+        {
+            if(myPlayer.connected && !myPlayer.dead && !myPlayer.isAtk)
+            {
+                if(Input.GetMouseButtonDown(0))
+                {
+                    //Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+                    Vector3 mPos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+                    mPos = mPos - myPlayer.transform.position;
+                    mPos.Normalize();
+                    float rz = Mathf.Atan2(mPos.y, mPos.x) * Mathf.Rad2Deg;
+                    Attack(rz);
+                    //Attack(mPos.x, mPos.y);
+
+                    myPlayer.isAtk = true;
+                    StartCoroutine(DelayFunc(0.5f,() => myPlayer.isAtk = false));
+                }
+            }
+        }
+    }
+
+    /*private void Attack(float x, float y)
+    {
+        ServerSend($"{id}#{x}#{y}", CommandHead.ATTACK);
+    }*/
+    private void Attack(float z)
+    {
+        ServerSend($"{id}#{z}", CommandHead.ATTACK);
+    }
+
+    public void Damaged(long serverID ,int attacker, int damagedID, int damage)
+    {
+        ServerSend($"{damagedID}#{damage}#{attacker}#{serverID}", CommandHead.DAMAGED);
+    }
+
+    public void Dead(int killer)
+    {
+        ServerSend($"{id}#{killer}", CommandHead.DEAD);
+    }
+
     public void Disconnect()
     {
         if (connected)
@@ -257,7 +395,9 @@ public class Client : MonoBehaviour
             inRoom = false;
             playerDict[id].connected = false;
 
-            foreach(int key in playerDict.Keys)
+            camMove.SetInit(null);
+
+            foreach (int key in playerDict.Keys)
             {
                 Destroy(playerDict[key].gameObject);
             }
@@ -274,9 +414,14 @@ public class Client : MonoBehaviour
             systemTxt.transform.parent.gameObject.SetActive(false);
         }
     }
-
     private void OnApplicationQuit()
     {
         Disconnect();
+    }
+
+    IEnumerator DelayFunc(float t, Action F)
+    {
+        yield return new WaitForSeconds(t);
+        F();
     }
 }

@@ -21,6 +21,7 @@ namespace UDPServer
 
         public int index = 0; //유저 아이디
         public int roomIndex = 0; //방 아이디
+        public long bulletID = 0; //총알 아이디
 
         public string rtStr;
         public EndPoint remote;
@@ -100,8 +101,9 @@ namespace UDPServer
                         if (create == 0)
                         {
                             roomDic.Add(roomIndex, new Room(roomIndex, data[3], int.Parse(data[4]), ID));
+                            WriteLine(userDic[ID].name + "님이 방을 생성함. 방 아이디: " + roomIndex.ToString());
+
                             roomIndex++;
-                            WriteLine(userDic[ID].name + "님이 방을 생성함");
                         }
                         else
                         {
@@ -129,7 +131,30 @@ namespace UDPServer
                         {
                             Broadcast(userDic[ID].currentRoom.userList, msg);
                         }
-                        WriteLine("채팅: " + userDic[ID].name + ":" + data[2]);
+                        WriteLine("채팅: " + userDic[ID].name + ":" + msg.Substring(msg.IndexOf('#', 5) + 1));
+                        break;
+
+                    case "ATTACK":  //공격
+                        ID = int.Parse(data[1]);
+                        if (userDic[ID].isRoom)
+                        {
+                            Broadcast(userDic[ID].currentRoom.userList, msg + "#" + bulletID.ToString());
+                            bulletID++;
+                        }
+                        WriteLine("공격: " + userDic[ID].name);
+                        break;
+
+                    case "DAMAGED":  //공격받음
+                        ID = int.Parse(data[1]);
+                        BroadcastRoomMsg(ID, msg, "공격 당함: " + userDic[ID].name);
+                        break;
+
+                    case "DEAD":
+                        BroadcastRoomMsg(int.Parse(data[1]), msg, "사망: " + userDic[int.Parse(data[1])].name);
+                        break;
+
+                    case "RESPAWN":
+                        BroadcastRoomMsg(int.Parse(data[1]), msg, "부활: " + userDic[int.Parse(data[1])].name);
                         break;
 
                     default:  //정의하지 않은 헤드가 존재함
@@ -137,6 +162,15 @@ namespace UDPServer
                         break;
                 }
             }
+        }
+
+        private void BroadcastRoomMsg(int ID, string msg, string writeMsg)
+        {
+            if (userDic[ID].isRoom)
+            {
+                Broadcast(userDic[ID].currentRoom.userList, msg);
+            }
+            WriteLine(writeMsg);
         }
 
         public void EndServer()
