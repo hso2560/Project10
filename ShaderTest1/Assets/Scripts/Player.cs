@@ -103,7 +103,7 @@ public class Player : MonoBehaviour
         if (collision.CompareTag("Bullet"))
         {
             Bullet b = collision.GetComponent<Bullet>();
-            if(b.playerID != id)
+            if(connected && !dead && b.playerID != id)
             {
                 Client.instance.Damaged(b.serverID, b.playerID, id, b.damage);
             }
