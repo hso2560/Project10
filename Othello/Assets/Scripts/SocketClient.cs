@@ -20,6 +20,7 @@ public class CommandHead
     public static readonly string SYSTEM_MSG = "SYSTEM MSG";
     public static readonly string CHAT = "CHAT";
     public static readonly string GO = "GO";
+    public static readonly string COUNT = "COUNT";
     public static readonly string GAME_START = "GAME START";
     public static readonly string CREATE = "CREATE";
     public static readonly string HISTORY = "HISTORY";
@@ -313,6 +314,11 @@ public class SocketClient : MonoBehaviour
         if (!connected) return false;
         if (!started || !MyTurn) return false;
         return true;
+    }
+
+    public void SendCount(int cnt)
+    {
+        ServerSend(ClientID.ToString()+"#"+cnt.ToString(), CommandHead.COUNT);
     }
 
     public void CreateRoom()

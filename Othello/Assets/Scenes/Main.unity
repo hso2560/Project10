@@ -235,6 +235,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &42925176
@@ -557,6 +558,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &108003898
@@ -671,6 +673,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &161962786
@@ -785,6 +788,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &178593227
@@ -899,6 +903,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &183919207
@@ -1013,6 +1018,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &192056940
@@ -1127,6 +1133,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &209100010
@@ -1241,6 +1248,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &255404876
@@ -1430,6 +1438,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &261574208
@@ -1835,6 +1844,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &369822250
@@ -1949,6 +1959,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &372784657
@@ -2339,6 +2350,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &437255914
@@ -2453,6 +2465,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &465814685
@@ -2567,6 +2580,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &508307224
@@ -2681,6 +2695,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &520356243
@@ -2795,6 +2810,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &577005383
@@ -2910,6 +2926,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 1
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &594409232
@@ -3157,6 +3174,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &615874144
@@ -3271,6 +3289,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &697312152
@@ -3386,6 +3405,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 1
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &705507993
@@ -3593,6 +3613,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &746658488
@@ -3707,6 +3728,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &764270831
@@ -3821,6 +3843,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &770514310
@@ -4147,6 +4170,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &830067102
@@ -4261,6 +4285,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &865079140
@@ -4375,6 +4400,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &905466805
@@ -4490,6 +4516,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 1
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &915050736
@@ -5143,6 +5170,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 1
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1069831094
@@ -5400,6 +5428,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1101069133
@@ -5514,6 +5543,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1101501209
@@ -5673,6 +5703,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1108153219
@@ -5942,6 +5973,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1001 &1206879176
@@ -6296,6 +6328,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1295378396
@@ -6503,6 +6536,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1299091218
@@ -6744,6 +6778,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1354224976
@@ -6858,6 +6893,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1381663901
@@ -6972,6 +7008,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1413917032
@@ -7086,6 +7123,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1432805580
@@ -7343,6 +7381,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1001 &1482685977
@@ -7804,6 +7843,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1569568696
@@ -7984,6 +8024,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1584804544
@@ -8177,6 +8218,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1612638749
@@ -8528,6 +8570,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1687645878
@@ -8642,6 +8685,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1694644724
@@ -8835,6 +8879,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1696772852
@@ -9082,6 +9127,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1723678164
@@ -9196,6 +9242,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1774736182
@@ -9310,6 +9357,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1783249684
@@ -9503,6 +9551,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1839608761
@@ -9696,6 +9745,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1850529629
@@ -9855,6 +9905,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1878589485
@@ -9969,6 +10020,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1880511841
@@ -10330,6 +10382,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1930787122
@@ -10444,6 +10497,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1933326199
@@ -10637,6 +10691,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &1950160600
@@ -10909,6 +10964,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &2008374759
@@ -11023,6 +11079,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &2016184531
@@ -11137,6 +11194,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &2023458316
@@ -11410,6 +11468,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &2028171701
@@ -11524,6 +11583,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1001 &2037987914
@@ -11720,6 +11780,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &2096654528
@@ -11967,6 +12028,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &2115149294
@@ -12160,6 +12222,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &2128734348
@@ -12274,6 +12337,7 @@ MonoBehaviour:
   y: 0
   isPress: 0
   userID: -1
+  defaultStone: 0
   cellPos: {x: 0, y: 0.73, z: 0}
   stone: {fileID: 0}
 --- !u!1 &2142171620

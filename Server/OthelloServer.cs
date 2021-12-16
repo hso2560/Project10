@@ -18,6 +18,7 @@ namespace OthelloServer
         public static readonly string SYSTEM_MSG = "SYSTEM MSG";
         public static readonly string CHAT = "CHAT";
         public static readonly string GO = "GO";
+        public static readonly string COUNT = "COUNT";
         public static readonly string GAME_START = "GAME START";
         public static readonly string CREATE = "CREATE";
         public static readonly string HISTORY = "HISTORY";
@@ -132,6 +133,10 @@ namespace OthelloServer
 
                     case "GIVE UP":  //포기
 
+                        break;
+
+                    case "COUNT":
+                        userDic[int.Parse(data[1])].currentMyCellCnt = int.Parse(data[2]);
                         break;
 
                     case "GO":  //수를 둠 (기물 배치)
