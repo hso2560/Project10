@@ -65,10 +65,17 @@ public class Cell : MonoBehaviour
     public void Clear()
     {
         isPress = false;
-        if(stone && !defaultStone)
+        if(stone)
         {
-            Destroy(stone);
-            stone = null;
+            if (!defaultStone)
+            {
+                Destroy(stone);
+                stone = null;
+            }
+            else
+            {
+                stone.GetComponent<MeshRenderer>().material = x == y ? board.fGreenMat : board.sRedMat;
+            }
         }
         userID = -1;
     }

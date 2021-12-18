@@ -22,6 +22,7 @@ public class CommandHead
     public static readonly string GO = "GO";
     public static readonly string COUNT = "COUNT";
     public static readonly string GAME_START = "GAME START";
+    public static readonly string GAME_END = "GAME END";
     public static readonly string CREATE = "CREATE";
     public static readonly string HISTORY = "HISTORY";
 }
@@ -36,6 +37,7 @@ public class SocketClient : MonoBehaviour
     [SerializeField] private InputField portInput;
     [SerializeField] private InputField nickInput;
     public InputField enterInput;
+    //public Image myColorImage; //green or red
 
     [SerializeField] private Text ratingTxt, roomIdTxt, usersInfoTxt;
 
@@ -70,6 +72,7 @@ public class SocketClient : MonoBehaviour
 
     public Text[] gameNickTxt;
     public GameObject[] turnMark;
+    public Color[] markColor;
 
 
     private void Awake()
@@ -243,15 +246,16 @@ public class SocketClient : MonoBehaviour
                                 if (started)
                                 {
                                     started = false;
-                                    board.Clear();
                                     Escape();
                                     IsFirst = false;
                                     MyTurn = false;
                                 }
+                                board.Clear();
+                                UIManager.instance.ClearChat();
                             }
                             else
                             {
-                                UIManager.instance.SystemMsgPopup(playerDict[ID].name + "´ÔÀÌ ³ª°¬½À´Ï´Ù.");
+                                UIManager.instance.SystemMsgPopup(playerDict[ID].nickname + "´ÔÀÌ ³ª°¬½À´Ï´Ù.");
                             }
                             break;
 
@@ -266,6 +270,10 @@ public class SocketClient : MonoBehaviour
                             IsFirst = f;
                             MyTurn = f;
 
+                            //myColorImage.color = f ? Color.green : Color.red;
+
+                            turnMark[0].GetComponent<Image>().color = f ? markColor[0] : markColor[1];
+                            turnMark[1].GetComponent<Image>().color = f ? markColor[1] : markColor[0];
                             turnMark[MyTurn ? 0 : 1].SetActive(true);
 
                             board.GameStart(IsFirst);
@@ -281,6 +289,11 @@ public class SocketClient : MonoBehaviour
                             turnMark[1].SetActive(!MyTurn);
                             break;
 
+                        case "GAME END":
+                            ID = int.Parse(data[1]);
+                            started = false;
+                            break;
+
                         case "HISTORY":
                             ID = int.Parse(data[1]);
                             Player p2 = Instantiate(playerPref, transform).GetComponent<Player>();
@@ -290,6 +303,10 @@ public class SocketClient : MonoBehaviour
 
                         case "SYSTEM MSG":
                             UIManager.instance.SystemMsgPopup(data[1]);
+                            break;
+
+                        case "CHAT":
+                            UIManager.instance.Chat($"<b>{playerDict[int.Parse(data[1])].nickname}:</b> {data[2]}");
                             break;
 
                         case "DISCONNECTION":
@@ -357,6 +374,15 @@ public class SocketClient : MonoBehaviour
             {
                 usersInfoTxt.text += otherPlayer.nickname; 
             }
+        }
+    }
+
+    public void SendChatMsg(InputField chatInput)
+    {
+        if (connected && chatInput.text.Trim() != "")
+        {
+            ServerSend(ClientID.ToString() + "#" + chatInput.text, CommandHead.CHAT);
+            chatInput.text = "";
         }
     }
 

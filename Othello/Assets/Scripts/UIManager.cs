@@ -13,18 +13,111 @@ public class UIManager : MonoBehaviour
 
     public RectTransform systemPanelTrm;
     public Text systemText;
+    public InputField chatInput;
 
     private Vector2 systemPanelStartPos;
 
+    public Transform ChatTextParent;
+    public GameObject chatPanel, chatNotice;
+    public GameObject chatTxtPref;
+    public Scrollbar chatScroll;
+
+    private Queue<bool> UIQueue = new Queue<bool>();
+
+    public CanvasGroup loadingPanel;
+
     private void Awake()
     {
+        if (!loadingPanel.gameObject.activeSelf) loadingPanel.gameObject.SetActive(true);
+
         instance = this;
         systemPanelStartPos = systemPanelTrm.anchoredPosition;
+        chatPanel.SetActive(false);
+        chatPanel.transform.localScale = Vector3.zero;
+
+        loadingPanel.DOFade(0, 0.7f).OnComplete(() => loadingPanel.gameObject.SetActive(false));
     }
 
     private void Start()
     {
         StartCoroutine(SystemMsgCo());
+    }
+
+    public void ChatPanelOnOff(bool on)
+    {
+        if (UIQueue.Count > 1) return;
+
+        UIQueue.Enqueue(false);
+
+        if (on)
+        {
+            if(chatPanel.activeSelf)
+            {
+                UIQueue.Dequeue();
+                return;
+            }
+
+            chatPanel.SetActive(true);
+            GameManager.instance.IsStopped = true;
+            chatNotice.SetActive(false);
+        }
+
+        chatPanel.transform.DOScale(on ? Vector3.one : Vector3.zero, 0.5f).OnComplete(() =>
+        {
+            if (!on)
+            {
+                chatPanel.SetActive(false);
+                GameManager.instance.IsStopped = false;
+            }
+            UIQueue.Dequeue();
+        });
+    }
+
+    public void Chat(string msg)
+    {
+        Text ct = Instantiate(chatTxtPref, ChatTextParent).GetComponent<Text>();
+        ct.text = msg;
+        chatScroll.value = 0;
+        ChatTextParent.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, int.MaxValue);
+
+        if (!chatPanel.activeSelf)
+        {
+            chatNotice.SetActive(true);
+        }
+    }
+
+    public void ClearChat()
+    {
+        if(ChatTextParent.childCount>0)
+        {
+            for(int i=0; i<ChatTextParent.childCount; i++)
+            {
+                Destroy(ChatTextParent.GetChild(i).gameObject);
+            }
+        }
+        if(chatPanel.activeSelf)
+        {
+            chatPanel.SetActive(false);
+            GameManager.instance.IsStopped = false;
+            chatPanel.transform.localScale = Vector3.zero;
+        }
+        ChatTextParent.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(chatPanel.activeSelf)
+            {
+                ChatPanelOnOff(false);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if(chatPanel.activeSelf)
+               SocketClient.instance.SendChatMsg(chatInput);
+        }
     }
 
     public void SystemMsgPopup(string msg)

@@ -14,9 +14,16 @@ public class GameManager : MonoBehaviour
     RaycastHit hit;
     Ray ray;
 
+    public bool IsStopped
+    {
+        get;
+        set;
+    }
+
     private void Awake()
     {
         instance = this;
+        IsStopped = false;
     }
 
     private void Update()
@@ -26,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     private void PlaceObject()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && !IsStopped)
         {
             if(SocketClient.instance.CanPlaceObject())
             {
@@ -49,5 +56,10 @@ public class GameManager : MonoBehaviour
         if (!board.CanLay(SocketClient.instance.ClientID, c.x, c.y)) return false;  
 
         return true;
+    }
+
+    public void OnClickQuitBtn()
+    {
+        Application.Quit();
     }
 }
