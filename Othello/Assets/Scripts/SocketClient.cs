@@ -292,6 +292,7 @@ public class SocketClient : MonoBehaviour
                         case "GAME END":
                             ID = int.Parse(data[1]);
                             started = false;
+                            UIManager.instance.GameResult(ID==ClientID?"½Â¸®":(ID==-1?"¹«½ÂºÎ":"ÆÐ¹è"));
                             break;
 
                         case "HISTORY":
@@ -336,6 +337,11 @@ public class SocketClient : MonoBehaviour
     public void SendCount(int cnt)
     {
         ServerSend(ClientID.ToString()+"#"+cnt.ToString(), CommandHead.COUNT);
+    }
+
+    public void EndGame()
+    {
+        ServerSend(ClientID.ToString(), CommandHead.GAME_END);
     }
 
     public void CreateRoom()

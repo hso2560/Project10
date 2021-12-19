@@ -38,12 +38,8 @@ public class Cell : MonoBehaviour
             stone.transform.localPosition = cellPos;
             stone.transform.localRotation = Quaternion.Euler(0, 0, 0);
             stone.transform.localScale = board.stoneLocalScale;
-            board.SetColor(stone.GetComponent<MeshRenderer>(), id, x, y);
         }
-        else
-        {
-            board.SetColor(stone.GetComponent<MeshRenderer>(), id, x, y);
-        }
+        board.SetColor(stone.GetComponent<MeshRenderer>(), id, x, y);
     }
 
     public void SetColor(Material m, int id)

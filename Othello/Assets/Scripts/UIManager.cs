@@ -22,6 +22,9 @@ public class UIManager : MonoBehaviour
     public GameObject chatTxtPref;
     public Scrollbar chatScroll;
 
+    public GameObject resultPanel;
+    public Text resultTxt;
+
     private Queue<bool> UIQueue = new Queue<bool>();
 
     public CanvasGroup loadingPanel;
@@ -102,6 +105,15 @@ public class UIManager : MonoBehaviour
             chatPanel.transform.localScale = Vector3.zero;
         }
         ChatTextParent.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+    }
+
+    public void GameResult(string result)
+    {
+        if (resultPanel)
+        {
+            resultPanel.SetActive(true);
+            resultTxt.text = result;
+        }
     }
 
     private void Update()

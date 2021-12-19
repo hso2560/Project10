@@ -137,12 +137,28 @@ public class Board : MonoBehaviour
 
         changeObjs.ForEach(x => x.SetColor(mat, id));
 
-        SendCellCount();
+        SendCellCount(id);
+        CheckFullCount(id);
     }
 
-    private void SendCellCount()
+    private void CheckFullCount(int ID)
+    {
+        if (SocketClient.instance.ClientID == ID)
+        {
+            foreach(Cell c in cellList)
+            {
+                if (c.userID == -1) return;
+            }
+
+            SocketClient.instance.EndGame();
+        }
+    }
+
+    private void SendCellCount(int ID)
     {
         int id = SocketClient.instance.ClientID;
+        if (ID != id) return;
+
         int count = 0;
 
         cellList.ForEach(x =>
