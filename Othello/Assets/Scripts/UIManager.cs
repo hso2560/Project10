@@ -111,8 +111,25 @@ public class UIManager : MonoBehaviour
     {
         if (resultPanel)
         {
+            resultPanel.transform.localScale = Vector3.zero;
             resultPanel.SetActive(true);
+            resultPanel.transform.DOScale(Vector3.one, 0.4f);
             resultTxt.text = result;
+
+            switch(result)
+            {
+                case "½Â¸®":
+                    resultTxt.color = Color.yellow;
+                    break;
+                case "¹«½ÂºÎ":
+                    resultTxt.color = Color.white;
+                    break;
+                case "ÆÐ¹è":
+                    resultTxt.color = new Color(1, 0, 1, 1);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

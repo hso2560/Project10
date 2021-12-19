@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     RaycastHit hit;
     Ray ray;
 
+    [SerializeField] private float limitTime = 30f;
+    private float currentTime = 0f;
+
     public bool IsStopped
     {
         get;

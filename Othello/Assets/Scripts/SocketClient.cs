@@ -250,6 +250,10 @@ public class SocketClient : MonoBehaviour
                                     IsFirst = false;
                                     MyTurn = false;
                                 }
+                                if (roomPanel.activeSelf)
+                                {
+                                    Escape();
+                                }
                                 board.Clear();
                                 UIManager.instance.ClearChat();
                             }
