@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace OthelloServer
 {
@@ -23,6 +24,7 @@ namespace OthelloServer
         public static readonly string GAME_END = "GAME END";
         public static readonly string CREATE = "CREATE";
         public static readonly string HISTORY = "HISTORY";
+        public static readonly string MATCHING = "MATCHING";
     }
 
     class Program
@@ -41,10 +43,15 @@ namespace OthelloServer
 
         public EndPoint remote;
 
+        private static Queue<string> processQueue = new Queue<string>();
+        private Thread procThr;
+
         public void StartServer()
         {
             ipep = new IPEndPoint(IPAddress.Any, port);
             server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            procThr = new Thread(ProcessData);
+            procThr.Start();
 
             server.Bind(ipep);
 
@@ -66,11 +73,24 @@ namespace OthelloServer
                     {
                         WriteLine(e.ToString());
                     }
+
                     string str = Encoding.UTF8.GetString(_data);
                     Array.Clear(_data, 0, _data.Length);
+                    processQueue.Enqueue(str);
                     //WriteLine("Server Receive Data : " + rtStr + " => " + str);
 
-                    ProcessCommand(str);
+                    //ProcessCommand(str);
+                }
+            }
+        }
+
+        private void ProcessData()
+        {
+            while (true)
+            {
+                while (processQueue.Count > 0)
+                {
+                    ProcessCommand(processQueue.Dequeue());
                 }
             }
         }
@@ -169,6 +189,7 @@ namespace OthelloServer
 
         public void EndServer()
         {
+            procThr.Abort();
             roomDic.Clear();
             userDic.Clear();
             server.Close();
