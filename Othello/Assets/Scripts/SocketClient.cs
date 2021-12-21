@@ -25,6 +25,9 @@ public class CommandHead
     public static readonly string GAME_END = "GAME END";
     public static readonly string CREATE = "CREATE";
     public static readonly string HISTORY = "HISTORY";
+    public static readonly string MATCHING = "MATCHING";
+    public static readonly string CANCEL_MATCHING = "CANCEL MATCHING";
+    //public static readonly string MATCHING_COMPLETE = "MATCHING COMPLETE";
 }
 
 public class SocketClient : MonoBehaviour
@@ -32,7 +35,7 @@ public class SocketClient : MonoBehaviour
     public static SocketClient instance;
 
     public Stack<GameObject> UIStack = new Stack<GameObject>();
-    public GameObject loginPanel, lobbyPanel, roomPanel, gamePanel;
+    public GameObject loginPanel, lobbyPanel, roomPanel, gamePanel, matchingPanel;
     [SerializeField] private InputField ipInput;
     [SerializeField] private InputField portInput;
     [SerializeField] private InputField nickInput;
@@ -45,7 +48,7 @@ public class SocketClient : MonoBehaviour
     private IPAddress ipAddr;
     private IPEndPoint endPoint;
 
-    private bool connected;
+    private bool connected, matching;
     private string receivedMsg = "";
     private Queue<string> netBuffer = new Queue<string>();
     private Thread ServerCheckThread;
@@ -314,6 +317,14 @@ public class SocketClient : MonoBehaviour
                             UIManager.instance.Chat($"<b>{playerDict[int.Parse(data[1])].nickname}:</b> {data[2]}");
                             break;
 
+                        case "CANCEL MATCHING":
+                            if(matching)
+                            {
+                                matching = false;
+                                Escape();
+                            }
+                            break;
+
                         case "DISCONNECTION":
                             ID = int.Parse(data[1]);
                             Destroy(playerDict[ID].gameObject);
@@ -371,6 +382,24 @@ public class SocketClient : MonoBehaviour
         if(InRoom)
         {
             ServerSend(ClientID.ToString(), CommandHead.EXIT);
+        }
+    }
+
+    public void StartMatching()
+    {
+        if (connected && !InRoom && !matching)
+        {
+            ServerSend(ClientID.ToString(), CommandHead.MATCHING);
+            matching = true;
+            InsertStack(matchingPanel);
+        }
+    }
+
+    public void CancelMatching()
+    {
+        if(matching)
+        {
+            ServerSend(ClientID.ToString(), CommandHead.CANCEL_MATCHING);
         }
     }
 

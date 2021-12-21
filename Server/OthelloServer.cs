@@ -25,6 +25,8 @@ namespace OthelloServer
         public static readonly string CREATE = "CREATE";
         public static readonly string HISTORY = "HISTORY";
         public static readonly string MATCHING = "MATCHING";
+        public static readonly string CANCEL_MATCHING = "CANCEL MATCHING";
+        //public static readonly string MATCHING_COMPLETE = "MATCHING COMPLETE";
     }
 
     class Program
@@ -38,20 +40,24 @@ namespace OthelloServer
         public static Dictionary<int, UserData> userDic = new Dictionary<int, UserData>();
         public static Dictionary<int, Room> roomDic = new Dictionary<int, Room>();
 
+        public static List<UserData> matchingUsers = new List<UserData>();
+
         public int index = 0; //유저 아이디
         public int roomIndex = 0; //방 아이디
 
         public EndPoint remote;
 
         private static Queue<string> processQueue = new Queue<string>();
-        private Thread procThr;
+        private Thread procThr, matchingThr;
 
         public void StartServer()
         {
             ipep = new IPEndPoint(IPAddress.Any, port);
             server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             procThr = new Thread(ProcessData);
+            matchingThr = new Thread(Matching);
             procThr.Start();
+            matchingThr.Start();
 
             server.Bind(ipep);
 
@@ -84,6 +90,32 @@ namespace OthelloServer
             }
         }
 
+        private void Matching()
+        {
+            while (true)
+            {
+                if (matchingUsers.Count > 1)
+                {
+                    UserData first = matchingUsers[0];
+                    UserData second = matchingUsers[1];
+
+                    matchingUsers.RemoveAt(0);
+                    matchingUsers.RemoveAt(0);
+
+                    Room room = new Room(roomIndex, first);
+                    roomDic.Add(roomIndex, room);
+                    roomIndex++;
+
+                    room.AddUser(second);
+
+                    WriteLine($"매칭 완료.  방장: {first.name}, 상대방: {second.name}");
+
+                    room.StartGame(first.id);
+                    //Broadcast(room.userList, first.id.ToString(), CommandHead.MATCHING_COMPLETE);
+                }
+            }
+        }
+
         private void ProcessData()
         {
             while (true)
@@ -99,6 +131,7 @@ namespace OthelloServer
         {
             string[] data = msg.Split('#');
             int ID;
+            UserData u;
 
             if (data.Length > 1)
             {
@@ -180,6 +213,19 @@ namespace OthelloServer
                         userDic[int.Parse(data[1])].currentRoom.EndGame();
                         break;
 
+                    case "MATCHING":
+                        ID = int.Parse(data[1]);
+                        matchingUsers.Add(userDic[ID]);
+                        WriteLine("매칭 시작 : " + userDic[ID].name);
+                        break;
+
+                    case "CANCEL MATCHING":
+                        u = userDic[int.Parse(data[1])];
+                        matchingUsers.Remove(u);
+                        SendMsg(u.ep, "NULL", CommandHead.CANCEL_MATCHING);
+                        WriteLine("매칭 취소 : " + u.name);
+                        break;
+
                     default:  //정의하지 않은 헤드가 존재함
                         WriteLine("존재하지 않는 프로토콜 (head) : " + data[0]);
                         break;
@@ -189,6 +235,7 @@ namespace OthelloServer
 
         public void EndServer()
         {
+            matchingThr.Abort();
             procThr.Abort();
             roomDic.Clear();
             userDic.Clear();
