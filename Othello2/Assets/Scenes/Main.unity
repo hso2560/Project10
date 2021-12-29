@@ -5980,7 +5980,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 97730251}
         m_TargetAssemblyTypeName: SocketClient, Assembly-CSharp
-        m_MethodName: LeaveRoom
+        m_MethodName: EndResult
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

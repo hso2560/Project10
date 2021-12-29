@@ -45,7 +45,7 @@ namespace TCPServer1
         public static int roomIndex = 0; //방 아이디
 
         private object lockObj = new object();
-        private static object sendLock = new object(), broadLock = new object(), broadLock2 = new object();
+        private static object sendLock = new object(), broadLock = new object(), broadLock2 = new object(), broadLock3 = new object();
         private static object processLock = new object();
 
         private void StartServer()
@@ -78,8 +78,8 @@ namespace TCPServer1
 
         private void EndServer()
         {
-            procThr.Abort();
-            matchingThr.Abort();
+            procThr.Interrupt();
+            matchingThr.Interrupt();
             roomDic.Clear();
             userDic.Clear();
             matchingUsers.Clear();
@@ -181,9 +181,16 @@ namespace TCPServer1
                         break;
 
                     case "CHAT":  //챗
-                        ID = int.Parse(data[1]);
-                        WriteLine(userDic[ID].name + ": " + data[2]);
-                        Broadcast(userDic[ID].currentRoom.userList, msg);
+                        u = userDic[int.Parse(data[1])];
+                        WriteLine(u.name + ": " + data[2]);
+                        if (u.isRoom)
+                        {
+                            Broadcast(u.currentRoom.userList, msg);
+                        }
+                        else
+                        {
+                            BroadcastToLobby(msg);
+                        }
                         break;
 
                     case "CREATE":
@@ -255,6 +262,7 @@ namespace TCPServer1
         {
             lock (sendLock)
             {
+                //WriteLine("메시지 전송");
                 try
                 {
                     byte[] data = head == "" ? Encoding.UTF8.GetBytes(msg) : Encoding.UTF8.GetBytes(head + "#" + msg);
@@ -289,6 +297,18 @@ namespace TCPServer1
                 }
             }
         }
+
+        public static void BroadcastToLobby(string msg, string head = "")
+        {
+            lock (broadLock3)
+            {
+                foreach (UserData user in userDic.Values)
+                {
+                    if (!user.isRoom)
+                        SendMsg(user.stream, msg, head);
+                }
+            }
+        }
     }
 
     class UserData
@@ -298,7 +318,7 @@ namespace TCPServer1
         public string name;
         public TcpClient client;
         public NetworkStream stream;
-        //private Thread ctThread;
+        private Thread ctThread;
 
         public bool isRoom;
         public Room currentRoom;
@@ -317,10 +337,10 @@ namespace TCPServer1
             this.name = "init";
             connected = true;
 
-            Thread ctThread = new Thread(ClientWork);
+            ctThread = new Thread(ClientWork);
             ctThread.Start();
             Program.SendMsg(stream, id.ToString(), CommandHead.INIT);
-            WriteLine("유저 접속 ID: " + id);
+            WriteLine("유저 접속 ID: " + id + "  IP: " + client.Client.RemoteEndPoint.ToString());
         }
 
         public void Init(string name)
@@ -340,12 +360,19 @@ namespace TCPServer1
 
         private bool SocketConnected(Socket s)
         {
-            bool part1 = s.Poll(1000, SelectMode.SelectRead);
-            bool part2 = (s.Available == 0);
-            if (part1 && part2)
+            try
+            {
+                bool part1 = s.Poll(1000, SelectMode.SelectRead);
+                bool part2 = (s.Available == 0);
+                if (part1 && part2)
+                    return false;
+                else
+                    return true;
+            }
+            catch
+            {
                 return false;
-            else
-                return true;
+            }
         }
 
         private void ClientWork()
@@ -388,6 +415,7 @@ namespace TCPServer1
         public void Disconnect()
         {
             connected = false;
+            ctThread.Interrupt();
             stream.Close();
             client.Close();
         }
@@ -415,7 +443,6 @@ namespace TCPServer1
         public readonly int maxCount = 2;
         public int currentCount;
 
-        public bool isMatchingRoom;
         public UserData owner;
         public List<UserData> userList = new List<UserData>();
 
@@ -466,8 +493,9 @@ namespace TCPServer1
             currentCount--;
             user.SetRoom();
 
-            Program.Broadcast(userList, user.id.ToString(), CommandHead.EXIT);
             userList.Remove(user);
+            Program.Broadcast(userList, user.id.ToString(), CommandHead.EXIT);
+            Program.SendMsg(user.stream, user.id.ToString(), CommandHead.EXIT);
             WriteLine(user.name + "님이 방을 나감");
 
             if (isGameStart)

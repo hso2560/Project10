@@ -27,7 +27,6 @@ public class CommandHead
     public static readonly string HISTORY = "HISTORY";
     public static readonly string MATCHING = "MATCHING";
     public static readonly string CANCEL_MATCHING = "CANCEL MATCHING";
-    //public static readonly string MATCHING_COMPLETE = "MATCHING COMPLETE";
 }
 
 public class SocketClient : MonoBehaviour
@@ -239,9 +238,12 @@ public class SocketClient : MonoBehaviour
                             break;
 
                         case "CREATE":
+                            if(matching)
+                            {
+                                Escape();
+                            }
                             InRoom = true;
                             roomIdTxt.text = "방 아이디: " + data[1];
-                            //myPlayer.currentRoomID = int.Parse(data[1]);
                             UpdateRoom();
                             InsertStack(roomPanel);
                             break;
@@ -253,6 +255,10 @@ public class SocketClient : MonoBehaviour
                             UpdateRoom();
                             if(ID==ClientID)
                             {
+                                if (matching)
+                                {
+                                    Escape();
+                                }
                                 roomIdTxt.text = enterInput.text;
                                 InsertStack(roomPanel);
                                 enterInput.text = "";
@@ -261,23 +267,19 @@ public class SocketClient : MonoBehaviour
 
                         case "EXIT":
                             ID = int.Parse(data[1]);
-                            otherPlayer = null;
+                            
                             if(ID==ClientID)
                             {
                                 InRoom = false;
                                 Escape();
                                 turnMark[0].SetActive(false);
                                 turnMark[1].SetActive(false);
-                                if (started)
+                                if (roomPanel.activeSelf)
                                 {
                                     started = false;
                                     Escape();
                                     IsFirst = false;
                                     MyTurn = false;
-                                }
-                                if (roomPanel.activeSelf)
-                                {
-                                    Escape();
                                 }
                                 board.Clear();
                                 UIManager.instance.ClearChat();
@@ -290,9 +292,11 @@ public class SocketClient : MonoBehaviour
                                 }
                                 UIManager.instance.SystemMsgPopup(playerDict[ID].nickname + "님이 나갔습니다.");
                             }
+                            otherPlayer = null;
                             break;
 
                         case "GAME START":
+                            matching = false;
                             InsertStack(gamePanel);
                             mainCam.cullingMask = -1;
 
@@ -401,6 +405,7 @@ public class SocketClient : MonoBehaviour
 
     public void EndGame()
     {
+        Debug.Log("종료");
         ServerSend(ClientID.ToString(), CommandHead.GAME_END);
     }
 
@@ -426,7 +431,17 @@ public class SocketClient : MonoBehaviour
     {
         if(InRoom)
         {
+            Debug.Log("나감");
             ServerSend(ClientID.ToString(), CommandHead.EXIT);
+        }
+    }
+
+    public void EndResult()
+    {
+        if(InRoom)
+        {
+            UIManager.instance.resultPanel.SetActive(false);
+            LeaveRoom();
         }
     }
 
